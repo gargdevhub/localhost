@@ -11,13 +11,30 @@ use Exception;
 class HomeController extends Controller {
 
 	protected $commands = [
-		'Shut Down' => 'shutdown /s -t 0',
+		'ShutDown' => 'shutdown /s -t 0',
 		'Restart' => 'shutdown /r -t 0',
 	];
 
 	public function index(Request $request){
-		$commands = $this->commands;
-		return view('home',compact('commands'));
+		$accordians = [
+			'Commands' => [
+				'links' => array_map(function($command){
+					return [
+						'text' => $command,
+						'href' => url('command/'.$command),
+					];
+				},array_keys($this->commands))
+			],
+			'Tools' => [
+				'links' => [
+					[
+						'text' => 'Task List',
+						'href' => url('task-list'),
+					]
+				]
+			]
+		];
+		return view('home',compact('accordians'));
 	}
 
 	public function command(Request $request,$command){
