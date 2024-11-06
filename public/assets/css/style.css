@@ -1,0 +1,10 @@
+a{
+	text-decoration: none !important;
+	color: inherit;
+}
+button,
+button:hover,
+button:focus,
+button:active {
+	box-shadow: none !important;
+}
