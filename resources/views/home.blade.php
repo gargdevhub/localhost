@@ -1,37 +1,27 @@
 @extends('layouts.master')
 @section('title','Home')
 @section('content')
-	<div class="row">
-		<div class="col-md-12">
-			<h2 class="text-center mb-4">Rohan PC</h2>
-			@if(session()->has('success'))
-				<div class="alert alert-success alert-dismissible fade show">
-					{{ session()->get('success') }}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-			@endif
-			@if(!empty($accordians))
-				<div class="accordion">
-					@foreach($accordians as $accordian_title => $accordian_data)
-						<div class="accordion-item mb-2">
-							<h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $accordian_title }}">{{ $accordian_title }}</button></h2>
-							<div id="{{ $accordian_title }}" class="accordion-collapse collapse">
-								<div class="accordion-body">
-									@if(!empty($accordian_data['links']))
-										<div class="row justify-content-center">
-											@foreach($accordian_data['links'] as $link)
-												<div class="col-3">
-													<a href="{{ $link['href'] }}" class="d-block btn btn-primary btn-lg">{{ $link['text'] ?? 'Link' }}</a>
-												</div>
-											@endforeach
-										</div>
-									@endif
-								</div>
-							</div>
-						</div>
-					@endforeach
-				</div>
-			@endif
+	<div id="tools" class="my-3">
+		<h3 class="mb-4">Tools</h3>
+		<div class="row justify-content-center">
+			<div class="col-auto">
+				<a href="{{ url('task-manager') }}" class="d-block btn btn-primary px-5">Task Manager</a>
+			</div>
+			<div class="col-auto">
+				<a href="{{ url('file-manager') }}" class="d-block btn btn-primary px-5">File Manager</a>
+			</div>
 		</div>
 	</div>
+	@if(!empty($commands))
+		<div id="commands" class="my-3">
+			<h3 class="mb-4">Commands</h3>
+			<div class="row justify-content-center">
+				@foreach($commands as $command)
+					<div class="col-auto">
+						<a href="javascript:void(0)" confirm-href="{{ url('command/'.$command) }}" confirm-text="Execute {{ StringHelper::kebabToWordCase($command) }}?" class="d-block btn btn-primary px-5">{{ StringHelper::kebabToWordCase($command) }}</a>
+					</div>
+				@endforeach
+			</div>
+		</div>
+	@endif
 @endsection

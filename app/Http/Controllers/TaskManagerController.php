@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use ValueError;
 use Exception;
 
-class TaskController extends Controller {
+class TaskManagerController extends Controller {
 
 	protected $removable_matches = [
 		'AggregatorHost',
@@ -70,7 +70,7 @@ class TaskController extends Controller {
 
 	public function index(Request $request){
 		$task_list = shell_exec('Tasklist');
-		$tasks = $this->filterTasks($this->parseTaskList($task_list));
+		$tasks = $this->parseTaskList($task_list);
 		return view('task-list',compact('tasks'));
 	}
 
@@ -82,6 +82,10 @@ class TaskController extends Controller {
 		}
 		$tasks = preg_split("/\R/",$task_list);
 		$tasks = array_slice($tasks,3);
+		return $this->filterTasks($tasks);
+	}
+
+	private function filterTasks($tasks){
 		$tasks = array_values(array_filter($tasks,function($task){
 			return !empty($task) && !Str::contains($task,$this->removable_matches);
 		}));
@@ -93,10 +97,6 @@ class TaskController extends Controller {
 			return ucfirst($task);
 		},$tasks);
 		return array_values(array_unique($tasks));
-	}
-
-	private function filterTasks($tasks){
-		return $tasks;
 	}
 
 }
